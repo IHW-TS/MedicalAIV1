@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const request = require('request');
 const CryptoJS = require('crypto-js');
@@ -15,6 +16,12 @@ function getAuthToken() {
     const uri = "https://authservice.priaid.ch/login";
     const api_key = process.env.API_USER;
     const secret_key = process.env.API_PASS;
+
+    if (!api_key || !secret_key) {
+      reject(new Error('Les variables d’API_KEY ou SECRET_KEY ne sont pas définies.'));
+      return;
+    }
+
     const computedHash = CryptoJS.HmacMD5(uri, secret_key);
     const computedHashString = computedHash.toString(CryptoJS.enc.Base64);
 
